@@ -1,0 +1,52 @@
+
+COMPLETE WARTSCHINSKI JAVA VULNERABILITY DATASET
+===============================================
+
+DATASET COMPOSITION:
+  Total samples: 15,044
+  Current samples: 10,039
+  Original Wartschinski added: 5,005
+    - Token-level samples: 5,005
+    - Code-level samples: 0
+
+SPLITS:
+  Training: 10,530 samples (70%)
+  Validation: 2,256 samples (15%)
+  Test: 2,258 samples (15%)
+
+VULNERABILITY DISTRIBUTION:
+  Input Validation: 3,004 samples (20.0%)
+  Unknown Security Issue: 2,931 samples (19.5%)
+  Other Security Issue: 1,672 samples (11.1%)
+  Configuration Error: 1,461 samples (9.7%)
+  Path Traversal: 1,429 samples (9.5%)
+  Access Control: 1,064 samples (7.1%)
+  SQL Injection: 810 samples (5.4%)
+  Command Injection: 684 samples (4.5%)
+  Denial of Service: 486 samples (3.2%)
+  Race Condition: 455 samples (3.0%)
+  XSS: 322 samples (2.1%)
+  CSRF: 281 samples (1.9%)
+  XXE: 187 samples (1.2%)
+  Deserialization: 151 samples (1.0%)
+  Information Disclosure: 77 samples (0.5%)
+  Cross-Site Scripting (XSS): 24 samples (0.2%)
+  Buffer Overflow: 6 samples (0.0%)
+
+DATA SOURCES:
+  JavaVFC: 7,916 samples (52.6%)
+  Wartschinski_Token_Level: 5,005 samples (33.3%)
+  MegaVul: 2,123 samples (14.1%)
+
+DATASET QUALITY:
+  ✓ Original Wartschinski samples included
+  ✓ Token-level and code-level formats combined
+  ✓ Vulnerability-focused (non-vulnerabilities removed)
+  ✓ Smart distribution with quality controls
+  ✓ Proper deduplication applied
+  ✓ Ready for LSTM training
+
+EXPECTED PERFORMANCE:
+  With original Wartschinski samples: 75-85% F1-score
+  High-quality token-level data: Superior performance expected
+===============================================

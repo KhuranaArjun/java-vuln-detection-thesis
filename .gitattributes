@@ -1,0 +1,3 @@
+*.h5 filter=lfs diff=lfs merge=lfs -text
+*.keras filter=lfs diff=lfs merge=lfs -text
+complete_wartschinski_final/complete_wartschinski_all_formats.json filter=lfs diff=lfs merge=lfs -text
