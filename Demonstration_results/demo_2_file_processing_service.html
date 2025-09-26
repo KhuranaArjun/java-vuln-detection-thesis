@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Java Vulnerability Analysis - File Processing Service</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .code-container {
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        .code-line {
+            margin: 0;
+            padding: 3px 8px;
+            line-height: 1.4;
+            border-radius: 2px;
+            white-space: pre;
+        }
+        .line-number {
+            color: #666;
+            margin-right: 15px;
+            font-weight: bold;
+            min-width: 30px;
+            display: inline-block;
+        }
+        .safe { background-color: #FFFFFF; }
+        .low { background-color: #FFEB3B; }
+        .medium { background-color: #FF9800; }
+        .high { background-color: #F44336; color: white; }
+        .critical { background-color: #B71C1C; color: white; }
+        .legend {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .legend-item {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Java Vulnerability Analysis - File Processing Service</div>
+        
+        <div class="legend">
+            <strong>Vulnerability Levels:</strong>
+            <span class="legend-item critical">Critical</span>
+            <span class="legend-item high">High</span>
+            <span class="legend-item medium">Medium</span>
+            <span class="legend-item low">Low</span>
+            <span class="legend-item safe">Safe</span>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 1:</span>public class FileProcessor {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 2:</span>    private Runtime runtime;</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 3:</span>    </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 4:</span>    public void processUserFile(String filename, String userInput) {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 5:</span>        // Vulnerable command injection</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 6:</span>        String command = "cat " + filename + " | grep " + userInput;</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 7:</span>        </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 8:</span>        try {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 9:</span>            Process process = runtime.exec(command);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">10:</span>            BufferedReader reader = new BufferedReader(</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">11:</span>                new InputStreamReader(process.getInputStream()));</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">12:</span>            </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">13:</span>            String line;</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">14:</span>            while ((line = reader.readLine()) != null) {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">15:</span>                System.out.println("Found: " + line);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">16:</span>            }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">17:</span>        } catch (IOException e) {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">18:</span>            System.err.println("Command execution failed: " + command);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">19:</span>        }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">20:</span>    }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">21:</span>    </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">22:</span>    public File getUserFile(String userPath) {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">23:</span>        // Vulnerable path traversal</div>
+            <div class="code-line medium" title="Score: 0.60 | Type: PATH_TRAVERSAL"><span class="line-number">24:</span>        String filePath = "/home/user/files/" + userPath;</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">25:</span>        return new File(filePath);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">26:</span>    }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">27:</span>    </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">28:</span>    public void logFileAccess(String filename, String user) {</div>
+            <div class="code-line high" title="Score: 0.75 | Type: XSS"><span class="line-number">29:</span>        System.out.println("File accessed: " + filename + " by user: " + user);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">30:</span>    }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">31:</span>}</div>
+
+        </div>
+        
+        <div class="summary">
+            <strong>Analysis Summary:</strong><br>
+            Total lines: 31<br>
+            Vulnerabilities found: 2<br>
+            Distribution: {'safe': 29, 'medium': 1, 'high': 1}
+        </div>
+    </div>
+</body>
+</html>

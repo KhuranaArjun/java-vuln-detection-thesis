@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Java Vulnerability Analysis - User Authentication System</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .code-container {
+            background-color: #fafafa;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            overflow-x: auto;
+        }
+        .code-line {
+            margin: 0;
+            padding: 3px 8px;
+            line-height: 1.4;
+            border-radius: 2px;
+            white-space: pre;
+        }
+        .line-number {
+            color: #666;
+            margin-right: 15px;
+            font-weight: bold;
+            min-width: 30px;
+            display: inline-block;
+        }
+        .safe { background-color: #FFFFFF; }
+        .low { background-color: #FFEB3B; }
+        .medium { background-color: #FF9800; }
+        .high { background-color: #F44336; color: white; }
+        .critical { background-color: #B71C1C; color: white; }
+        .legend {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border-radius: 4px;
+        }
+        .legend-item {
+            display: inline-block;
+            margin: 5px 10px;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-weight: bold;
+        }
+        .summary {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e3f2fd;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">Java Vulnerability Analysis - User Authentication System</div>
+        
+        <div class="legend">
+            <strong>Vulnerability Levels:</strong>
+            <span class="legend-item critical">Critical</span>
+            <span class="legend-item high">High</span>
+            <span class="legend-item medium">Medium</span>
+            <span class="legend-item low">Low</span>
+            <span class="legend-item safe">Safe</span>
+        </div>
+        
+        <div class="code-container">
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 1:</span>public class UserAuthenticator {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 2:</span>    private Connection connection;</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 3:</span>    private Logger logger;</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 4:</span>    </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 5:</span>    public boolean authenticateUser(String username, String password) {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 6:</span>        // Vulnerable SQL injection - concatenating user input directly</div>
+            <div class="code-line critical" title="Score: 0.95 | Type: SQL_INJECTION"><span class="line-number"> 7:</span>        String query = "SELECT * FROM users WHERE username = '" + username + </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 8:</span>                      "' AND password = '" + password + "'";</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number"> 9:</span>        </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">10:</span>        try {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">11:</span>            Statement stmt = connection.createStatement();</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">12:</span>            ResultSet rs = stmt.executeQuery(query);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">13:</span>            </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">14:</span>            if (rs.next()) {</div>
+            <div class="code-line low" title="Score: 0.35 | Type: LOG_INJECTION"><span class="line-number">15:</span>                logger.info("User login successful: " + username);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">16:</span>                return true;</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">17:</span>            }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">18:</span>        } catch (SQLException e) {</div>
+            <div class="code-line high" title="Score: 0.75 | Type: XSS"><span class="line-number">19:</span>            System.out.println("Database error for user: " + username);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">20:</span>            e.printStackTrace();</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">21:</span>        }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">22:</span>        return false;</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">23:</span>    }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">24:</span>    </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">25:</span>    public void resetPassword(String username, String newPassword) {</div>
+            <div class="code-line critical" title="Score: 0.95 | Type: SQL_INJECTION"><span class="line-number">26:</span>        String updateQuery = "UPDATE users SET password = '" + newPassword + </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">27:</span>                           "' WHERE username = '" + username + "'";</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">28:</span>        </div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">29:</span>        try {</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">30:</span>            Statement stmt = connection.createStatement();</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">31:</span>            stmt.executeUpdate(updateQuery);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">32:</span>        } catch (SQLException e) {</div>
+            <div class="code-line low" title="Score: 0.35 | Type: LOG_INJECTION"><span class="line-number">33:</span>            logger.error("Password reset failed for: " + username);</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">34:</span>        }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">35:</span>    }</div>
+            <div class="code-line safe" title="Score: 0.00"><span class="line-number">36:</span>}</div>
+
+        </div>
+        
+        <div class="summary">
+            <strong>Analysis Summary:</strong><br>
+            Total lines: 36<br>
+            Vulnerabilities found: 5<br>
+            Distribution: {'safe': 31, 'critical': 2, 'low': 2, 'high': 1}
+        </div>
+    </div>
+</body>
+</html>
